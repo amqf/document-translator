@@ -1,3 +1,29 @@
+# Sobre
+
+Traduz documentos de uma linguagem para outra.
+
+Atualmente apenas lê arquivo PDF e persiste a tradução em um arquivo TXT.
+Está utilizando o Google Translator em sua versão gratuita e sem autenticação, então tem suas limitações (veja abaixo).
+
+## Como utilizá-lo?
+
+Este é um script para terminal e o mínimo necessário para utilizar o script é:
+
+```bash
+$ composer install
+$ php index.php -s ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt
+```
+
+Para customizá-lo mais, veja `php index.php`:
+
+![alt text](help.png)
+
+
+
+## Requerimentos
+
+- composer
+- PHP 8 ou superior
 
 # Limitações
 

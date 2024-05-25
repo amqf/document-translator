@@ -58,6 +58,24 @@ $flags->addOpt(
     required: true
 );
 
+$flags->addOpt(
+    'source-lang',
+    '',
+    //phpcs:disable
+    'Idioma do arquivo de origem',
+    FlagType::STRING,
+    required: true
+);
+
+$flags->addOpt(
+    'target-lang',
+    '',
+    //phpcs:disable
+    'Para qual idioma pretende traduzir',
+    FlagType::STRING,
+    required: true
+);
+
 try{
     $flags->parse();
 }catch(Exception $e)
@@ -73,6 +91,8 @@ define('INTERVAL_IN_SEC', $flags->getOpt('interval-in-sec', 60));
 define('STORAGE_DIR', __DIR__.'/storage');
 define('SOURCE_FILEPATH', $flags->getOpt('source-filepath'));
 define('OUTPUT_FILEPATH', $flags->getOpt('output-filepath'));
+define('SOURCE_LANG', $flags->getOpt('source-lang', 'en'));
+define('TARGET_LANG', $flags->getOpt('target-lang', 'pt-br'));
 
 /**
  * This do setup all script to translate
@@ -84,8 +104,8 @@ $transformer = TransformerManager::create(
     PDFReader::create(SOURCE_FILEPATH),
     GoogleTranslator::create(
         new GoogleTranslate,
-        sourceLang: 'en',
-        targetLang: 'pt-br'
+        sourceLang: SOURCE_LANG,
+        targetLang: TARGET_LANG
     ),
     MAX_CHARS_PER_REQUEST,
     INTERVAL_IN_SEC
