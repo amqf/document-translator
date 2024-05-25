@@ -11,7 +11,14 @@ Este é um script para terminal e o mínimo necessário para utilizar o script �
 
 ```bash
 $ composer install
+# Traduz do Inglês para Português do Brasil (padrão)
 $ php index.php -s ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt
+```
+
+Para traduzir do Português do Brasil (pt-br) para o Inglês (en)
+```bash
+$ composer install
+$ php index.php -s ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt --source-lang=pt-br --target-lang=en
 ```
 
 Para customizá-lo mais, veja `php index.php`:
