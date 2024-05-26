@@ -1,7 +1,14 @@
+#!/usr/bin/env php
 <?php
 
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
-require __DIR__ . '/../autoload.php';
+// Obtenha o caminho absoluto para o autoloader do Composer
+$autoloadPath = dirname(__DIR__) . '/vendor/autoload.php';
+
+if (!file_exists($autoloadPath)) {
+    fwrite(STDERR, "Autoloader not found. Did you run 'composer install'?\n");
+    exit(1);
+}
 
 /**
  * PHP Version ^8
