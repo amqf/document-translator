@@ -13,11 +13,6 @@ Para utilizar esta biblioteca no seu projeto pode seguir o exemplo abaixo.
 
 Utilize o parâmetro `onTranslate` para persistir a tradução em um arquivo, banco de dados, ou qualquer outro lugar mais apropriado para o seu projeto.
 
-<!-- git tag -a v3.0.0-beta -m 'CLEAN COMMAND LINE USAGE
-- Apply SOLID princples in CommandLine
-- Change command line arguments and options names to mading it clean
-- Create and use DocumentReader interface in PDFDocumentReader' -->
-
 ```php
 use DocumentTranslator\Core\Arguments;
 use DocumentTranslator\Library\DocumentTranslator;
