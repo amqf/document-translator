@@ -2,6 +2,7 @@
 // phpcs:disable
 namespace DocumentTranslator\Library;
 
+use DocumentTranslator\Core\File;
 use Exception;
 use DocumentTranslator\Library\Readers\DocumentReader;
 use DocumentTranslator\Library\Translators\Translator;
@@ -23,9 +24,9 @@ final class DocumentTranslator
         $this->_interval = 0;
     }
 
-    public function withFile(string $filepath) : self
+    public function withFile(File $file) : self
     {
-        $this->_reader->setFilepath($filepath);
+        $this->_reader->setFile($file);
         return $this;
     }
 

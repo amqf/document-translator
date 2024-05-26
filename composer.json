@@ -1,11 +1,17 @@
 {
     "name": "amqf/document-translator",
     "type": "library",
+    "scripts": {
+        "demo": [
+            "php index.php ./tests/stubs/awesome.pdf ./awesome.txt"
+        ]
+    },
     "bin": [
         "bin/document-translator"
     ],
     "autoload": {
         "psr-4": {
+            "DocumentTranslator\\Core\\": "src/Core",
             "DocumentTranslator\\Library\\": "src/Library",
             "DocumentTranslator\\Command\\": "src/Command"
         }
@@ -20,7 +26,6 @@
         "php": "^8",
         "spatie/pdf-to-text": "^1.52",
         "stichoza/google-translate-php": "^5.1",
-        "toolkit/pflag": "^2.0",
-        "phpoffice/phpword": "^1.2"
+        "toolkit/pflag": "^2.0"
     }
 }

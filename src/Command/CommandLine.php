@@ -2,6 +2,7 @@
 
 namespace DocumentTranslator\Command;
 
+use DocumentTranslator\Core\Arguments;
 use DocumentTranslator\Library\DocumentTranslator;
 use DocumentTranslator\Library\Readers\PDFDocumentReader;
 use DocumentTranslator\Library\Translators\GoogleTranslator;
@@ -24,88 +25,77 @@ use Toolkit\PFlag\FlagType;
  */
 final class CommandLine
 {
+    /**
+     * REQUIRED ARGUMENTS
+     */
+    private const REQUIRED_ARGUMENTS = [
+        [
+            'name' => 'file',
+            'desc' => '[OBRIGATÓRIO] Caminho do arquivo (PDF) que será traduzido',
+            'type' => FlagType::STRING,
+        ],
+        [
+            'name' => 'output',
+            'desc' => '[OBRIGATÓRIO] Caminho do arquivo (TXT) que será criado com o conteúdo traduzido',
+            'type' => FlagType::STRING,
+        ],
+    ];
+
+    /**
+     * OPTIONAL ARGUMENTS
+     */
+    private const OPTIONAL_ARGUMENTS = [
+        [
+            'name' => 'interval',
+            'shortcut' => 'i',
+            'desc' => 'Intervalo de espera entre requisições em segundos (padrão: 60)',
+            'type' => FlagType::INT,
+        ],
+        [
+            'name' => 'from',
+            'shortcut' => '',
+            'desc' => 'Idioma do arquivo de origem (padrão: en)',
+            'type' => FlagType::STRING,
+        ],
+        [
+            'name' => 'to',
+            'shortcut' => '',
+            'desc' => 'Para qual idioma pretende traduzir (padrão: pt-br)',
+            'type' => FlagType::STRING,
+        ],
+        [
+            'name' => 'chunk',
+            'shortcut' => '',
+            'desc' => 'Quantidade de caracteres traduzido por requisição (padrão: 5000)',
+            'type' => FlagType::INT,
+        ],
+    ];
+
     public static function main()
     {
-        $flags = Flags::new();
+        /** @var Arguments $arguments */
+        $arguments = static::parseArguments();
 
-        $flags->addOpt(
-            'max-chars-per-request',
-            'm',
-            'Máximo de caracteres por requisição (padrão: 5000)',
-            FlagType::INT
-        );
-
-        $flags->addOpt(
-            'interval-in-sec',
-            'i',
-            'Intervalo de espera entre requisições em segundos (padrão: 60)',
-            FlagType::INT
-        );
-
-        $flags->addOpt(
-            'file',
-            'f',
-            '[OBRIGATÓRIO] Caminho do arquivo (PDF) que será traduzido',
-            FlagType::STRING,
-            required: true
-        );
-
-        $flags->addOpt(
-            'output',
-            'o',
-            //phpcs:disable
-            '[OBRIGATÓRIO] Caminho do arquivo (TXT) que será criado com o conteúdo traduzido',
-            FlagType::STRING,
-            required: true
-        );
-
-        $flags->addOpt(
-            'source-lang',
-            '',
-            //phpcs:disable
-            'Idioma do arquivo de origem (padrão: en)',
-            FlagType::STRING,
-        );
-
-        $flags->addOpt(
-            'target-lang',
-            '',
-            //phpcs:disable
-            'Para qual idioma pretende traduzir (padrão: pt-br)',
-            FlagType::STRING,
-        );
-
-        try {
-            $flags->parse();
-        } catch (Exception $e) {
-            echo $e->getMessage() . PHP_EOL . PHP_EOL;
-
-            $flags->displayHelp(true);
-            exit(1);
-        }
-
-        $file = realpath($flags->getOpt('file'));
-        $filepath = realpath($flags->getOpt('output'));
-        $basename = basename($filepath);
-        $dirname = dirname($filepath);
-
-        if (empty($basename))
+        if (!$arguments->inputFile->exists())
         {
-            throw new InvalidArgumentException('Invalid filepath: ' . $filepath);
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Invalid file path: %s',
+                    $arguments->inputFile->getPath()
+                ),
+            );
         }
 
-        if (!empty($dirname) && !is_dir($dirname)) {
-            mkdir($dirname, 0755);
-        }
-
-        $fp = fopen($filepath, 'a');
+        $fp = fopen($arguments->inputFile->getPath(), 'a');
 
         DocumentTranslator::create(
-            new PDFDocumentReader,
+            match ($arguments->inputFile->getExtension()) {
+                'pdf' => new PDFDocumentReader,
+            },
             new GoogleTranslator
-        )->withFile($file)
-        ->fromLanguage($flags->getOpt('source-lang', 'en'))
-        ->toLanguage($flags->getOpt('target-lang', 'pt-br'))
+        )->withFile($arguments->inputFile)
+        ->fromLanguage($arguments->fromLanguage)
+        ->toLanguage($arguments->toLanguage)
         ->translate(
             onTranslate: function (string $old, string $new, int $offset) use ($fp) {
                 echo sprintf("Processing offset %d...\n", $offset);
@@ -126,5 +116,34 @@ final class CommandLine
         );
 
         fclose($fp);
+    }
+
+    private static function parseArguments() : Arguments
+    {
+        $flags = Flags::new();
+
+        foreach(static::REQUIRED_ARGUMENTS as $argument)
+        {
+            $flags->addArg(...$argument);
+        }
+
+        foreach(static::OPTIONAL_ARGUMENTS as $option)
+        {
+            $flags->addOpt(...$option);
+        }
+
+        try {
+            return (ArgumentParser::parser(
+                $flags,
+                defaultFrom: 'en',
+                defaultTo: 'pt-br',
+                defaultChunk: 5000,
+                defaultInterval: 60
+            ));
+        } catch (Exception $e) {
+            echo $e->getMessage() . PHP_EOL . PHP_EOL;
+            $flags->displayHelp(true);
+            exit(1);
+        }
     }
 }

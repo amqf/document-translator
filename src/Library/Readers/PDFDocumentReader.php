@@ -2,28 +2,29 @@
 // phpcs:disable
 namespace DocumentTranslator\Library\Readers;
 
+use DocumentTranslator\Core\File;
 use Spatie\PdfToText\Pdf;
 
 final class PDFDocumentReader implements DocumentReader
 {
     private string $_text;
-    private string $_filepath;
+    private File $_file;
 
-    public function setFilepath(string $filepath) : void
+    public function setFile(File $file) : void
     {
-        $this->_filepath = $filepath;
+        $this->_file = $file;
     }
 
-    public function getFilepath() : string
+    public function getFile() : File
     {
-        return $this->_filepath;
+        return $this->_file;
     }
 
     public function getText(int $offset=0, int $length = 0) : string
     {
         if(empty($this->_text))
         {
-            $this->_text = Pdf::getText($this->_filepath);
+            $this->_text = Pdf::getText($this->_file->getRealpath());
         }
 
         if ($length === 0) {
