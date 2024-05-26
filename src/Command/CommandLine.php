@@ -84,7 +84,7 @@ final class CommandLine
             exit(1);
         }
 
-        $filepath = $flags->getOpt('output');
+        $filepath = realpath($flags->getOpt('output'));
         $basename = basename($filepath);
         $dirname = dirname($filepath);
 
@@ -96,10 +96,6 @@ final class CommandLine
         if (!empty($dirname) && !is_dir($dirname)) {
             mkdir($dirname, 0755);
         }
-
-        var_dump(realpath($filepath));
-        var_dump( $filepath);
-        die();
 
         $fp = fopen($filepath, 'a');
 
