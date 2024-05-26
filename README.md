@@ -36,8 +36,7 @@ $fp = fopen(OUTPUT_FILEPATH, 'a');
 
 DocumentTranslator::create(
    new PDFDocumentReader(),
-   new GoogleTranslator,
-   chunk: 5000
+   new GoogleTranslator
 )->withFile(PDF_FILEPATH)
 ->fromLanguage(FROM_LANGUAGE)
 ->toLanguage(TO_LANGUAGE)
