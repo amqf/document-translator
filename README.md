@@ -5,21 +5,58 @@ Traduz documentos de uma linguagem para outra.
 Atualmente apenas lê arquivo PDF e persiste a tradução em um arquivo TXT.
 Está utilizando o Google Translator em sua versão gratuita e sem autenticação, então tem suas limitações (veja abaixo).
 
-## Como utilizá-lo?
+# Utilização
+
+## Como biblioteca
+
+Para utilizar esta biblioteca no seu projeto pode seguir o exemplo abaixo.
+
+Utilize o parâmetro `onTranslate` para persistir a tradução em um arquivo, banco de dados, ou qualquer outro lugar mais apropriado para o seu projeto.
+
+```php
+use DocumentTranslator\Library\DocumentTranslator;
+use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Translators\GoogleTranslator;
+use Exception;
+
+DocumentTranslator::create(
+   new PDFReader,
+   new GoogleTranslator,
+   chunk: 5000
+)->withFile('./awesome.pdf')
+->fromLanguage('en')
+->toLanguage('pt-br')
+->translate(
+   filepath: './awesome_translated.txt',
+   onTranslate: function (string $old, string $new, int $offset) {
+         echo sprintf("Processing offset %d...\n", $offset);
+   },
+   onSuccess: function (string $filepath) {
+         echo sprintf(
+            "Processed %d characters.\n",
+            strlen(file_get_contents($filepath))
+         );
+   },
+   onError: function (Exception $exception) {
+         throw new Exception('Cannot translate file', $exception);
+   }
+);
+```
+
+## Command Line
 
 Este é um script para terminal e o mínimo necessário para utilizar o script é:
 
 ```bash
-$ composer install
 # Traduz do Inglês para Português do Brasil (padrão)
-$ php index.php -s ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt
+$ ./vendor/bin/document-translator -f ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt
 ```
 
 Para traduzir do Português do Brasil (pt-br) para o Inglês (en):
 
 ```bash
 $ composer install
-$ php index.php -s ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt --source-lang=pt-br --target-lang=en
+$ php index.php -f ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt --source-lang=pt-br --target-lang=en
 ```
 
 Para customizá-lo mais, veja `php index.php`:
@@ -27,8 +64,7 @@ Para customizá-lo mais, veja `php index.php`:
 ![alt text](help.png)
 
 
-
-## Requerimentos
+# Requerimentos
 
 - composer
 - PHP 8 ou superior

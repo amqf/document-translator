@@ -57,14 +57,14 @@ final class DocumentTranslator
 
     /**
      * @param string $filepath
-     * @param callable $onTransform (string $old, string $new, int $offset)
+     * @param callable $onTranslate (string $old, string $new, int $offset)
      * @param callable $onSuccess (string $filepath)
      * @param callable $onError (Exception $exception)
      * @return void
      */
     public function translate(
         string $filepath,
-        callable $onTransform = null,
+        callable $onTranslate = null,
         callable $onSuccess = null,
         callable $onError = null
         ) : void
@@ -86,9 +86,9 @@ final class DocumentTranslator
         try
         {
             $this->translateChunk(
-                function (string $old, string $new, int $offset) use ($fp, $onTransform) {
+                function (string $old, string $new, int $offset) use ($fp, $onTranslate) {
                     fwrite($fp, $new);
-                    $onTransform($old, $new, $offset);
+                    $onTranslate($old, $new, $offset);
                 }
             );
 

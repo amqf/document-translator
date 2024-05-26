@@ -42,15 +42,15 @@ final class CommandLine
         );
 
         $flags->addOpt(
-            'source-filepath',
-            's',
+            'file',
+            'f',
             '[OBRIGATÓRIO] Caminho do arquivo (PDF) que será traduzido',
             FlagType::STRING,
             required: true
         );
 
         $flags->addOpt(
-            'output-filepath',
+            'output',
             'o',
             //phpcs:disable
             '[OBRIGATÓRIO] Caminho do arquivo (TXT) que será criado com o conteúdo traduzido',
@@ -87,12 +87,12 @@ final class CommandLine
             new PDFReader(),
             new GoogleTranslator,
             chunk: 5000
-        )->withFile($flags->getOpt('source-filepath'))
+        )->withFile($flags->getOpt('file'))
         ->fromLanguage($flags->getOpt('source-lang', 'en'))
         ->toLanguage($flags->getOpt('target-lang', 'pt-br'))
         ->translate(
-            $flags->getOpt('output-filepath'),
-            onTransform: function (string $old, string $new, int $offset) {
+            $flags->getOpt('output'),
+            onTranslate: function (string $old, string $new, int $offset) {
                 echo sprintf("Processing offset %d...\n", $offset);
             },
             onSuccess: function (string $filepath) {
