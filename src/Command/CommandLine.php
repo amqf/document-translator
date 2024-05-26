@@ -112,10 +112,10 @@ final class CommandLine
                 echo sprintf("Processing offset %d...\n", $offset);
                 fwrite($fp, $new);
             },
-            onSuccess: function (string $filepath) {
+            onSuccess: function (string $amountTranslatedChars) {
                 echo sprintf(
                     "Processed %d characters.\n",
-                    strlen(file_get_contents($filepath))
+                    $amountTranslatedChars
                 );
                 exit(0);
             },
