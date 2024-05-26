@@ -19,28 +19,40 @@ use DocumentTranslator\Library\Reader\PDFReader;
 use DocumentTranslator\Library\Translators\GoogleTranslator;
 use Exception;
 
+define('FROM_LANGUAGE', 'en');
+define('TO_LANGUAGE', 'PT-BR');
+define('PDF_FILEPATH', './awesome.pdf');
+define('OUTPUT_FILEPATH', './awesome.txt');
+
+$fp = fopen(OUTPUT_FILEPATH, 'a');
+
 DocumentTranslator::create(
-   new PDFReader,
+   new PDFReader(),
    new GoogleTranslator,
    chunk: 5000
-)->withFile('./awesome.pdf')
-->fromLanguage('en')
-->toLanguage('pt-br')
+)->withFile(PDF_FILEPATH)
+->fromLanguage(FROM_LANGUAGE)
+->toLanguage(TO_LANGUAGE)
 ->translate(
-   filepath: './awesome_translated.txt',
-   onTranslate: function (string $old, string $new, int $offset) {
+   onTranslate: function (string $old, string $new, int $offset) use ($fp) {
          echo sprintf("Processing offset %d...\n", $offset);
+         fwrite($fp, $new);
    },
-   onSuccess: function (string $filepath) {
+   onSuccess: function (string $amountTranslatedChars) {
          echo sprintf(
             "Processed %d characters.\n",
-            strlen(file_get_contents($filepath))
+            $amountTranslatedChars
          );
+         exit(0);
    },
-   onError: function (Exception $exception) {
-         throw new Exception('Cannot translate file', $exception);
+   onError: function (Exception $exception) use ($fp) {
+         echo 'ERROR! ' . $exception->getMessage();
+         fclose($fp);
+         exit(1);
    }
 );
+
+fclose($fp);
 ```
 
 ## Command Line
