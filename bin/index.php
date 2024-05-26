@@ -20,7 +20,7 @@ use DocumentTranslator\Library\Translator;
 use DocumentTranslator\Library\Reader\Transformers\GoogleTranslator;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
-require_once './vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use Toolkit\PFlag\Flags;
 use Toolkit\PFlag\FlagType;

@@ -20,6 +20,7 @@ final class GoogleTranslator implements Transformer
 
     public function transform(string $text) : string
     {
+        return 'xablauzim';
         return $this->_googleTranslator->translate($text);
     }
 
