@@ -97,6 +97,10 @@ final class CommandLine
             mkdir($dirname, 0755);
         }
 
+        var_dump(realpath($filepath));
+        var_dump( $filepath);
+        die();
+
         $fp = fopen($filepath, 'a');
 
         DocumentTranslator::create(
