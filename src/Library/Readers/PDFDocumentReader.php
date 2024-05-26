@@ -4,12 +4,12 @@ namespace DocumentTranslator\Library\Readers;
 
 use Spatie\PdfToText\Pdf;
 
-final class PDFDocumentReader
+final class PDFDocumentReader implements DocumentReader
 {
     private string $_text;
     private string $_filepath;
 
-    public function setFilepath(string $filepath)
+    public function setFilepath(string $filepath) : void
     {
         $this->_filepath = $filepath;
     }
