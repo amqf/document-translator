@@ -56,10 +56,10 @@ Para traduzir do Português do Brasil (pt-br) para o Inglês (en):
 
 ```bash
 $ composer install
-$ php index.php -f ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt --source-lang=pt-br --target-lang=en
+$ ./vendor/bin/document-translator -f ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt --source-lang=pt-br --target-lang=en
 ```
 
-Para customizá-lo mais, veja `php index.php`:
+Para customizá-lo mais, veja o help exibido ao executar `./vendor/bin/document-translator`:
 
 ![alt text](help.png)
 
