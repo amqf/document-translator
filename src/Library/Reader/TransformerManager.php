@@ -1,12 +1,11 @@
 <?php
 // phpcs:disable
-namespace DocumentTranslator\Reader;
+namespace DocumentTranslator\Library\Reader;
 
 use Exception;
-use Generator;
 use InvalidArgumentException;
-use DocumentTranslator\Reader\PDFReader;
-use DocumentTranslator\Reader\Transformers\Transformer;
+use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Reader\Transformers\Transformer;
 
 final class TransformerManager
 {

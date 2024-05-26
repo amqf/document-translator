@@ -1,6 +1,6 @@
 <?php
 // phpcs:disable
-namespace DocumentTranslator\Reader;
+namespace DocumentTranslator\Library\Reader;
 
 use Spatie\PdfToText\Pdf;
 

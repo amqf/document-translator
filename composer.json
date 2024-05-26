@@ -5,8 +5,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DocumentTranslator\\Reader\\": "src/Reader",
-            "DocumentTranslator\\Translation\\": "src/Translation"
+            "DocumentTranslator\\Library\\": "src/Library"
         }
     },
     "authors": [

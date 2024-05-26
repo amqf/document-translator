@@ -1,9 +1,9 @@
 <?php
 //phpcs:disable
 
-namespace DocumentTranslator\Reader\Transformers;
+namespace DocumentTranslator\Library\Reader\Transformers;
 
-use DocumentTranslator\Reader\Transformers\Transformer;
+use DocumentTranslator\Library\Reader\Transformers\Transformer;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
 final class GoogleTranslator implements Transformer
@@ -20,10 +20,8 @@ final class GoogleTranslator implements Transformer
 
     public function transform(string $text) : string
     {
-        return 'xablau';
-        // return $this->_googleTranslator->translate($text);
+        return $this->_googleTranslator->translate($text);
     }
-
 
     public static function create(
         GoogleTranslate $googleTranslator,

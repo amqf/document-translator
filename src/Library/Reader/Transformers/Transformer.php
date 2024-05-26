@@ -1,6 +1,6 @@
 <?php
 // phpcs:disable
-namespace DocumentTranslator\Reader\Transformers;
+namespace DocumentTranslator\Library\Reader\Transformers;
 
 interface Transformer
 {

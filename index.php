@@ -15,9 +15,9 @@
 
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 
-use DocumentTranslator\Reader\PDFReader;
-use DocumentTranslator\Reader\TransformerManager;
-use DocumentTranslator\Reader\Transformers\GoogleTranslator;
+use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Reader\TransformerManager;
+use DocumentTranslator\Library\Reader\Transformers\GoogleTranslator;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
 require_once './vendor/autoload.php';
@@ -62,18 +62,16 @@ $flags->addOpt(
     'source-lang',
     '',
     //phpcs:disable
-    'Idioma do arquivo de origem',
+    'Idioma do arquivo de origem (padrão: en)',
     FlagType::STRING,
-    required: true
 );
 
 $flags->addOpt(
     'target-lang',
     '',
     //phpcs:disable
-    'Para qual idioma pretende traduzir',
+    'Para qual idioma pretende traduzir (padrão: pt-br)',
     FlagType::STRING,
-    required: true
 );
 
 try{
