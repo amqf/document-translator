@@ -3,7 +3,7 @@
 namespace DocumentTranslator\Command;
 
 use DocumentTranslator\Library\DocumentTranslator;
-use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Readers\PDFDocumentReader;
 use DocumentTranslator\Library\Translators\GoogleTranslator;
 use Exception;
 use InvalidArgumentException;
@@ -101,9 +101,8 @@ final class CommandLine
         $fp = fopen($filepath, 'a');
 
         DocumentTranslator::create(
-            new PDFReader(),
-            new GoogleTranslator,
-            chunk: 5000
+            new PDFDocumentReader,
+            new GoogleTranslator
         )->withFile($file)
         ->fromLanguage($flags->getOpt('source-lang', 'en'))
         ->toLanguage($flags->getOpt('target-lang', 'pt-br'))

@@ -3,20 +3,24 @@
 namespace DocumentTranslator\Library;
 
 use Exception;
-use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Readers\DocumentReader;
 use DocumentTranslator\Library\Translators\Translator;
+use InvalidArgumentException;
 
 final class DocumentTranslator
 {
     private int $_amountTranslatedChars = 0;
-    
+    private int $_chunk;
+    private int $_interval;
+
     private function __construct(
-        private PDFReader $_reader,
+        private DocumentReader $_reader,
         private Translator $_translator,
-        private int $_chunk=5000,
-        private int $_interval=0
+        
     )
     {
+        $this->_chunk = 5000;
+        $this->_interval = 0;
     }
 
     public function withFile(string $filepath) : self
@@ -25,13 +29,63 @@ final class DocumentTranslator
         return $this;
     }
 
+    public function setChunk(int $chunk) : void
+    {
+        if($chunk < 10)
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DocumentTranslator chunk cannot be less than 10. Given %d',
+                    $chunk
+                )
+            );
+        }
+
+        $this->_chunk = $chunk;
+    }
+
+    public function setInterval(int $interval) : void
+    {
+        if($interval < 0)
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DocumentTranslator interval cannot be less than 0. Given %d',
+                    $interval
+                )
+            );
+        }
+
+        $this->_interval = $interval;
+    }
+
     public function fromLanguage(string $language) : self
     {
+        if($language < 0)
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DocumentTranslator fromLanguage cannot empty',
+                    $language
+                )
+            );
+        }
+
         return $this;
     }
 
     public function toLanguage(string $language) : self
     {
+        if($language < 0)
+        {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DocumentTranslator toLanguage cannot empty',
+                    $language
+                )
+            );
+        }
+
         return $this;
     }
 
@@ -96,17 +150,13 @@ final class DocumentTranslator
     }
 
     public static function create(
-        PDFReader $reader,
-        Translator $translator,
-        int $chunk,
-        int $interval=0,
+        DocumentReader $reader,
+        Translator $translator
     ) : self
     {
         return new self(
             $reader,
-            $translator,
-            $chunk,
-            $interval
+            $translator
         );
     }
 }

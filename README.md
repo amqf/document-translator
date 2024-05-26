@@ -15,7 +15,7 @@ Utilize o parâmetro `onTranslate` para persistir a tradução em um arquivo, ba
 
 ```php
 use DocumentTranslator\Library\DocumentTranslator;
-use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Readers\PDFDocumentReader;
 use DocumentTranslator\Library\Translators\GoogleTranslator;
 use Exception;
 
@@ -27,7 +27,7 @@ define('OUTPUT_FILEPATH', './awesome.txt');
 $fp = fopen(OUTPUT_FILEPATH, 'a');
 
 DocumentTranslator::create(
-   new PDFReader(),
+   new PDFDocumentReader(),
    new GoogleTranslator,
    chunk: 5000
 )->withFile(PDF_FILEPATH)

@@ -20,6 +20,7 @@
         "php": "^8",
         "spatie/pdf-to-text": "^1.52",
         "stichoza/google-translate-php": "^5.1",
-        "toolkit/pflag": "^2.0"
+        "toolkit/pflag": "^2.0",
+        "phpoffice/phpword": "^1.2"
     }
 }

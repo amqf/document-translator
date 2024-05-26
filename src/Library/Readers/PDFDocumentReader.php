@@ -1,10 +1,10 @@
 <?php
 // phpcs:disable
-namespace DocumentTranslator\Library\Reader;
+namespace DocumentTranslator\Library\Readers;
 
 use Spatie\PdfToText\Pdf;
 
-final class PDFReader
+final class PDFDocumentReader
 {
     private string $_text;
     private string $_filepath;
