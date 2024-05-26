@@ -3,12 +3,13 @@
 namespace DocumentTranslator\Library;
 
 use Exception;
-use InvalidArgumentException;
 use DocumentTranslator\Library\Reader\PDFReader;
 use DocumentTranslator\Library\Translators\Translator;
 
 final class DocumentTranslator
 {
+    private int $_amountTranslatedChars = 0;
+    
     private function __construct(
         private PDFReader $_reader,
         private Translator $_translator,
@@ -20,7 +21,7 @@ final class DocumentTranslator
 
     public function withFile(string $filepath) : self
     {
-        $this->_reader->setFile($filepath);
+        $this->_reader->setFilepath($filepath);
         return $this;
     }
 
@@ -34,7 +35,7 @@ final class DocumentTranslator
         return $this;
     }
 
-    public function translateChunk(callable $listener) : void
+    public function translateChunks(callable $listener) : void
     {
         for (
             $offset = 0;
@@ -63,41 +64,35 @@ final class DocumentTranslator
      * @return void
      */
     public function translate(
-        string $filepath,
         callable $onTranslate = null,
         callable $onSuccess = null,
         callable $onError = null
         ) : void
     {
-        $basename = basename($filepath);
-        $dirname = dirname($filepath);
-
-        if (empty($basename))
-        {
-            throw new InvalidArgumentException('invalid filepath');
-        }
-
-        if (!empty($dirname) && !is_dir($dirname)) {
-            mkdir($dirname, 0755);
-        }
-
-        $fp = fopen($filepath, 'a');
-
         try
         {
-            $this->translateChunk(
-                function (string $old, string $new, int $offset) use ($fp, $onTranslate) {
-                    fwrite($fp, $new);
+            $this->translateChunks(
+                function (string $old, string $new, int $offset) use ($onSuccess, $onTranslate) {
                     $onTranslate($old, $new, $offset);
+                    $this->increaseAmountTranslatedChars($old);
                 }
             );
 
-            $onSuccess($filepath);
+            $onSuccess($this->getAmountTranslatedChars());
+            
         } catch(Exception $e) {
             $onError($e);
-        } 
-        
-        fclose($fp);
+        }        
+    }
+
+    private function increaseAmountTranslatedChars(string $text) : void
+    {
+        $this->_amountTranslatedChars += strlen($text);
+    }
+
+    private function getAmountTranslatedChars() : int
+    {
+        return $this->_amountTranslatedChars;
     }
 
     public static function create(

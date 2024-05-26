@@ -7,11 +7,16 @@ use Spatie\PdfToText\Pdf;
 final class PDFReader
 {
     private string $_text;
-    private string $_filename;
+    private string $_filepath;
 
-    public function setFile(string $filepath)
+    public function setFilepath(string $filepath)
     {
         $this->_filepath = $filepath;
+    }
+
+    public function getFilepath() : string
+    {
+        return $this->_filepath;
     }
 
     public function getText(int $offset=0, int $length = 0) : string

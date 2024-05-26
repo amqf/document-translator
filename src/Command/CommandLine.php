@@ -6,6 +6,7 @@ use DocumentTranslator\Library\DocumentTranslator;
 use DocumentTranslator\Library\Reader\PDFReader;
 use DocumentTranslator\Library\Translators\GoogleTranslator;
 use Exception;
+use InvalidArgumentException;
 use Toolkit\PFlag\Flags;
 use Toolkit\PFlag\FlagType;
 
@@ -83,6 +84,21 @@ final class CommandLine
             exit(1);
         }
 
+        $filepath = $flags->getOpt('output');
+        $basename = basename($filepath);
+        $dirname = dirname($filepath);
+
+        if (empty($basename))
+        {
+            throw new InvalidArgumentException('Invalid filepath: ' . $filepath);
+        }
+
+        if (!empty($dirname) && !is_dir($dirname)) {
+            mkdir($dirname, 0755);
+        }
+
+        $fp = fopen($filepath, 'a');
+
         DocumentTranslator::create(
             new PDFReader(),
             new GoogleTranslator,
@@ -91,9 +107,9 @@ final class CommandLine
         ->fromLanguage($flags->getOpt('source-lang', 'en'))
         ->toLanguage($flags->getOpt('target-lang', 'pt-br'))
         ->translate(
-            $flags->getOpt('output'),
-            onTranslate: function (string $old, string $new, int $offset) {
+            onTranslate: function (string $old, string $new, int $offset) use ($fp) {
                 echo sprintf("Processing offset %d...\n", $offset);
+                fwrite($fp, $new);
             },
             onSuccess: function (string $filepath) {
                 echo sprintf(
@@ -102,10 +118,13 @@ final class CommandLine
                 );
                 exit(0);
             },
-            onError: function (Exception $exception) {
+            onError: function (Exception $exception) use ($fp) {
                 echo 'ERROR! ' . $exception->getMessage();
+                fclose($fp);
                 exit(1);
             }
         );
+
+        fclose($fp);
     }
 }
