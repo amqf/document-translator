@@ -16,7 +16,7 @@
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 
 use DocumentTranslator\Library\Reader\PDFReader;
-use DocumentTranslator\Library\Reader\TransformerManager;
+use DocumentTranslator\Library\Translator;
 use DocumentTranslator\Library\Reader\Transformers\GoogleTranslator;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
@@ -96,9 +96,9 @@ define('TARGET_LANG', $flags->getOpt('target-lang', 'pt-br'));
  * This do setup all script to translate
  * your document as you want.
  *  
- * @var TransformerManager 
+ * @var Translator 
  * */
-$transformer = TransformerManager::create(
+$transformer = Translator::create(
     PDFReader::create(SOURCE_FILEPATH),
     GoogleTranslator::create(
         new GoogleTranslate,

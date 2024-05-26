@@ -1,13 +1,13 @@
 <?php
 // phpcs:disable
-namespace DocumentTranslator\Library\Reader;
+namespace DocumentTranslator\Library;
 
 use Exception;
 use InvalidArgumentException;
 use DocumentTranslator\Library\Reader\PDFReader;
 use DocumentTranslator\Library\Reader\Transformers\Transformer;
 
-final class TransformerManager
+final class Translator
 {
     private function __construct(
         private PDFReader $_reader,
