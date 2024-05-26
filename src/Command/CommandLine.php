@@ -84,6 +84,7 @@ final class CommandLine
             exit(1);
         }
 
+        $file = realpath($flags->getOpt('file'));
         $filepath = realpath($flags->getOpt('output'));
         $basename = basename($filepath);
         $dirname = dirname($filepath);
@@ -103,7 +104,7 @@ final class CommandLine
             new PDFReader(),
             new GoogleTranslator,
             chunk: 5000
-        )->withFile($flags->getOpt('file'))
+        )->withFile($file)
         ->fromLanguage($flags->getOpt('source-lang', 'en'))
         ->toLanguage($flags->getOpt('target-lang', 'pt-br'))
         ->translate(
