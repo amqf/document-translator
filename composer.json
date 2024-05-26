@@ -1,8 +1,6 @@
 {
     "name": "amqf/document-translator",
-    "type": "project",
-    "scripts": {
-    },
+    "type": "library",
     "bin": [
         "bin/document-translator"
     ],
