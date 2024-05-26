@@ -4,8 +4,7 @@ namespace DocumentTranslator\Command;
 
 use DocumentTranslator\Library\DocumentTranslator;
 use DocumentTranslator\Library\Reader\PDFReader;
-use DocumentTranslator\Library\Reader\Translators\GoogleTranslator;
-use DocumentTranslator\Library\Translator;
+use DocumentTranslator\Library\Translators\GoogleTranslator;
 use Exception;
 use Toolkit\PFlag\Flags;
 use Toolkit\PFlag\FlagType;

@@ -5,7 +5,7 @@ namespace DocumentTranslator\Library;
 use Exception;
 use InvalidArgumentException;
 use DocumentTranslator\Library\Reader\PDFReader;
-use DocumentTranslator\Library\Reader\Translators\Translator;
+use DocumentTranslator\Library\Translators\Translator;
 
 final class DocumentTranslator
 {

@@ -1,6 +1,6 @@
 <?php
 // phpcs:disable
-namespace DocumentTranslator\Library\Reader\Translators;
+namespace DocumentTranslator\Library\Translators;
 
 interface Translator
 {
