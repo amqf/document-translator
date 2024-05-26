@@ -3,6 +3,9 @@
     "type": "project",
     "scripts": {
     },
+    "bin": [
+        "bin/document-translator.php"
+    ],
     "autoload": {
         "psr-4": {
             "DocumentTranslator\\Library\\": "src/Library"
