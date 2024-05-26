@@ -1,6 +1,9 @@
 {
     "name": "amqf/document-translator",
     "type": "library",
+    "scripts": {
+        "document-translator": "./bin/document-translator -s ./awesome.pdf -o ./awesome.txt"
+    },
     "bin": [
         "bin/document-translator"
     ],

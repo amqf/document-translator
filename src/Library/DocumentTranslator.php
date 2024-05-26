@@ -5,20 +5,36 @@ namespace DocumentTranslator\Library;
 use Exception;
 use InvalidArgumentException;
 use DocumentTranslator\Library\Reader\PDFReader;
-use DocumentTranslator\Library\Reader\Transformers\Transformer;
+use DocumentTranslator\Library\Reader\Translators\Translator;
 
-final class Translator
+final class DocumentTranslator
 {
     private function __construct(
         private PDFReader $_reader,
-        private Transformer $_transformer,
-        private int $_chunk,
+        private Translator $_translator,
+        private int $_chunk=5000,
         private int $_interval=0
     )
     {
     }
 
-    public function transform(callable $listener) : void
+    public function withFile(string $filepath) : self
+    {
+        $this->_reader->setFile($filepath);
+        return $this;
+    }
+
+    public function fromLanguage(string $language) : self
+    {
+        return $this;
+    }
+
+    public function toLanguage(string $language) : self
+    {
+        return $this;
+    }
+
+    public function translateChunk(callable $listener) : void
     {
         for (
             $offset = 0;
@@ -28,7 +44,7 @@ final class Translator
         {
             $listener(
                 $text,
-                $this->_transformer->transform($text),
+                $this->_translator->translate($text),
                 $offset
             );
             
@@ -46,7 +62,7 @@ final class Translator
      * @param callable $onError (Exception $exception)
      * @return void
      */
-    public function write(
+    public function translate(
         string $filepath,
         callable $onTransform = null,
         callable $onSuccess = null,
@@ -69,7 +85,7 @@ final class Translator
 
         try
         {
-            $this->transform(
+            $this->translateChunk(
                 function (string $old, string $new, int $offset) use ($fp, $onTransform) {
                     fwrite($fp, $new);
                     $onTransform($old, $new, $offset);
@@ -86,14 +102,14 @@ final class Translator
 
     public static function create(
         PDFReader $reader,
-        Transformer $transformer,
+        Translator $translator,
         int $chunk,
         int $interval=0,
     ) : self
     {
         return new self(
             $reader,
-            $transformer,
+            $translator,
             $chunk,
             $interval
         );

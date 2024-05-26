@@ -2,11 +2,11 @@
 
 namespace DocumentTranslator\Command;
 
+use DocumentTranslator\Library\DocumentTranslator;
 use DocumentTranslator\Library\Reader\PDFReader;
+use DocumentTranslator\Library\Reader\Translators\GoogleTranslator;
 use DocumentTranslator\Library\Translator;
-use DocumentTranslator\Library\Reader\Transformers\GoogleTranslator;
 use Exception;
-use Stichoza\GoogleTranslate\GoogleTranslate;
 use Toolkit\PFlag\Flags;
 use Toolkit\PFlag\FlagType;
 
@@ -84,28 +84,14 @@ final class CommandLine
             exit(1);
         }
 
-        /**
-         * This do setup all script to translate
-         * your document as you want.
-         *  
-         * @var Translator 
-         * */
-        $transformer = Translator::create(
-            PDFReader::create($flags->getOpt('source-filepath')),
-            GoogleTranslator::create(
-                new GoogleTranslate,
-                sourceLang: $flags->getOpt('source-lang', 'en'),
-                targetLang: $flags->getOpt('target-lang', 'pt-br')
-            ),
-            $flags->getOpt('max-chars-per-request', 5000),
-            $flags->getOpt('interval-in-sec', 60)
-        );
-
-        /**
-         * This really use the reader and translator
-         * that you setuped early. 
-         * */
-        $transformer->write(
+        DocumentTranslator::create(
+            new PDFReader(),
+            new GoogleTranslator,
+            chunk: 5000
+        )->withFile($flags->getOpt('source-filepath'))
+        ->fromLanguage($flags->getOpt('source-lang', 'en'))
+        ->toLanguage($flags->getOpt('target-lang', 'pt-br'))
+        ->translate(
             $flags->getOpt('output-filepath'),
             onTransform: function (string $old, string $new, int $offset) {
                 echo sprintf("Processing offset %d...\n", $offset);
