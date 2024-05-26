@@ -4,7 +4,7 @@
     "scripts": {
     },
     "bin": [
-        "bin/document-translator.php"
+        "bin/document-translator"
     ],
     "autoload": {
         "psr-4": {
