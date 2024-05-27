@@ -13,6 +13,8 @@ Para utilizar esta biblioteca no seu projeto pode seguir o exemplo abaixo.
 
 Utilize o parâmetro `onTranslate` para persistir a tradução em um arquivo, banco de dados, ou qualquer outro lugar mais apropriado para o seu projeto.
 
+**Exemplo:**
+
 ```php
 use DocumentTranslator\Core\Arguments;
 use DocumentTranslator\Library\DocumentTranslator;
@@ -47,6 +49,7 @@ DocumentTranslator::create(
             "Processed %d characters.\n",
             $amountTranslatedChars
          );
+         fclose($fp);
          exit(0);
    },
    onError: function (Exception $exception) use ($fp) {
@@ -56,7 +59,6 @@ DocumentTranslator::create(
    }
 );
 
-fclose($fp);
 ```
 
 ## Command Line
@@ -66,12 +68,16 @@ Caso deseja executar o `Command Line` logo após clonar o projeto com o `Git`, a
 
 Este é um script para terminal e o mínimo necessário para utilizar o script é:
 
+**#1 - Exemplo:**
+
 ```bash
 # Traduz do Inglês para Português do Brasil (padrão)
 $ ./vendor/bin/document-translator ./storage/arquivo_pdf.pdf ./storage/arquivo_traduzido.txt
 ```
 
 Para traduzir do Português do Brasil (pt-br) para o Inglês (en):
+
+**#2 - Exemplo:**
 
 ```bash
 $ composer install
