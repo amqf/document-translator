@@ -61,18 +61,21 @@ fclose($fp);
 
 ## Command Line
 
+Depois de instalada a biblioteca em um projeto, pode executar o `Command Line` utilizando `vendor/bin/document-translator`.
+Caso deseja executar o `Command Line` logo após clonar o projeto com o `Git`, ao invés de usar `vendor/bin/document-translator`, utilize `php index.php`.
+
 Este é um script para terminal e o mínimo necessário para utilizar o script é:
 
 ```bash
 # Traduz do Inglês para Português do Brasil (padrão)
-$ ./vendor/bin/document-translator -f ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt
+$ ./vendor/bin/document-translator ./storage/arquivo_pdf.pdf ./storage/arquivo_traduzido.txt
 ```
 
 Para traduzir do Português do Brasil (pt-br) para o Inglês (en):
 
 ```bash
 $ composer install
-$ ./vendor/bin/document-translator -f ./storage/arquivo_pdf.pdf -o ./storage/arquivo_traduzido.txt --source-lang=pt-br --target-lang=en
+$ ./vendor/bin/document-translator ./storage/arquivo_pdf.pdf ./storage/arquivo_traduzido.txt --from=pt-br --to=en
 ```
 
 Para customizá-lo mais, veja o help exibido ao executar `./vendor/bin/document-translator`:
