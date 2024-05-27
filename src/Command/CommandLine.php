@@ -86,7 +86,7 @@ final class CommandLine
             );
         }
 
-        $fp = fopen($arguments->inputFile->getPath(), 'a');
+        $fp = fopen($arguments->outputFile->getPath(), 'a');
 
         DocumentTranslator::create(
             match ($arguments->inputFile->getExtension()) {
@@ -101,11 +101,12 @@ final class CommandLine
                 echo sprintf("Processing offset %d...\n", $offset);
                 fwrite($fp, $new);
             },
-            onSuccess: function (string $amountTranslatedChars) {
+            onSuccess: function (string $amountTranslatedChars) use ($fp) {
                 echo sprintf(
-                    "Processed %d characters.\n",
+                    "X Processed %d characters.\n",
                     $amountTranslatedChars
                 );
+                fclose($fp);
                 exit(0);
             },
             onError: function (Exception $exception) use ($fp) {
@@ -114,8 +115,6 @@ final class CommandLine
                 exit(1);
             }
         );
-
-        fclose($fp);
     }
 
     private static function parseArguments() : Arguments
